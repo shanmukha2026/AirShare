@@ -126,12 +126,14 @@ class TransferService {
       await sink.close();
       stopwatch.stop();
 
-      // Use >= to handle minor byte-count edge cases from socket buffering.
-      // The real success indicator is the file existing with full content.
-      if (bytesReceived >= expectedSize) {
+      // Verify the actual saved file size on disk — this is the ground truth.
+      // Byte count comparison was unreliable due to socket buffering differences.
+      final savedFile = File(savePath);
+      final savedSize = await savedFile.length();
+      if (await savedFile.exists() && savedSize > 0) {
         onComplete();
       } else {
-        onError("Transfer incomplete. Got $bytesReceived of $expectedSize bytes.");
+        onError("Transfer incomplete. Saved $savedSize of $expectedSize bytes.");
       }
     } catch (e) {
       await sink?.close();

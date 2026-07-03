@@ -9,6 +9,8 @@ import '../models/peer.dart';
 import '../models/transfer.dart';
 import '../providers/peer_provider.dart';
 import '../providers/transfer_provider.dart';
+import '../providers/theme_provider.dart';
+import '../services/sound_service.dart';
 import 'widgets/radar_painter.dart';
 
 class RadarScreen extends ConsumerStatefulWidget {
@@ -43,6 +45,13 @@ class _RadarScreenState extends ConsumerState<RadarScreen>
       ref.read(peerProvider.notifier).startDiscovery();
       ref.read(transferProvider.notifier).startServer();
     });
+
+    // Listen for completed transfers to play ding sound
+    _listenForCompletedTransfers();
+  }
+
+  void _listenForCompletedTransfers() {
+    // Will be called via ref.listen in build
   }
 
   @override
@@ -56,6 +65,7 @@ class _RadarScreenState extends ConsumerState<RadarScreen>
   void _listenForAlerts() {
     ref.listen<FileTransfer?>(alertStateProvider, (previous, next) {
       if (next != null) {
+        SoundService.playWhoosh(); // play sound when file request arrives
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -137,26 +147,41 @@ class _RadarScreenState extends ConsumerState<RadarScreen>
       final name = result.files.single.name;
       final file = File(path);
 
+      SoundService.playWhoosh(); // 🔊 whoosh when sending starts
       await ref.read(transferProvider.notifier).sendFile(peer.id, peer.ipAddress, name, file);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // Listen for completed transfers → play ding
+    ref.listen<Map<String, FileTransfer>>(transferProvider, (prev, next) {
+      if (prev == null) return;
+      for (final id in next.keys) {
+        final newT = next[id];
+        final oldT = prev[id];
+        if (newT?.status == TransferStatus.completed &&
+            oldT?.status != TransferStatus.completed) {
+          SoundService.playDing();
+        }
+      }
+    });
+
     _listenForAlerts();
 
+    final isDark = ref.watch(themeProvider) == ThemeMode.dark;
     final peers = ref.watch(peerProvider);
     final transfers = ref.watch(transferProvider);
     final myDeviceName = ref.read(peerProvider.notifier).deviceName;
     final myDeviceType = ref.read(peerProvider.notifier).deviceType;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0F171E),
+      backgroundColor: isDark ? const Color(0xFF0F171E) : const Color(0xFFF0F4F8),
       body: SafeArea(
         child: Column(
           children: [
             // Header
-            _buildHeader(myDeviceName, myDeviceType, peers.length),
+            _buildHeader(myDeviceName, myDeviceType, peers.length, isDark),
 
             // Radar Workspace
             Expanded(
@@ -241,7 +266,7 @@ class _RadarScreenState extends ConsumerState<RadarScreen>
     );
   }
 
-  Widget _buildHeader(String name, String type, int peerCount) {
+  Widget _buildHeader(String name, String type, int peerCount, bool isDark) {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: const BoxDecoration(
@@ -251,16 +276,49 @@ class _RadarScreenState extends ConsumerState<RadarScreen>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          // Left side: Title + subtitle + device name
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Row(
+                children: [
+                  const Text(
+                    "AirShare",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.8,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: Colors.cyan.withOpacity(0.12),
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(color: Colors.cyan.withOpacity(0.35)),
+                    ),
+                    child: const Text(
+                      "v1.2.0",
+                      style: TextStyle(
+                        color: Colors.cyan,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 2),
               const Text(
-                "AirShare",
+                "Built by Pardhu",
                 style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 0.8,
+                  color: Colors.cyan,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.4,
                 ),
               ),
               const SizedBox(height: 4),
@@ -276,39 +334,63 @@ class _RadarScreenState extends ConsumerState<RadarScreen>
               ),
             ],
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: const Color(0xFF0F171E),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.cyan.withOpacity(0.3)),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 8,
-                  height: 8,
+          // Right side: Theme toggle + peer count
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () => ref.read(themeProvider.notifier).toggle(),
+                child: Container(
+                  width: 36,
+                  height: 36,
+                  margin: const EdgeInsets.only(right: 8),
                   decoration: BoxDecoration(
-                    color: peerCount > 0 ? Colors.green : Colors.amber,
+                    color: const Color(0xFF0F171E),
                     shape: BoxShape.circle,
+                    border: Border.all(color: Colors.cyan.withOpacity(0.3)),
+                  ),
+                  child: Icon(
+                    isDark ? Icons.light_mode : Icons.dark_mode,
+                    color: Colors.cyan,
+                    size: 18,
                   ),
                 ),
-                const SizedBox(width: 6),
-                Text(
-                  peerCount > 0 ? "$peerCount Peers Active" : "Scanning...",
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF0F171E),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: Colors.cyan.withOpacity(0.3)),
                 ),
-              ],
-            ),
-          )
+                child: Row(
+                  children: [
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: peerCount > 0 ? Colors.green : Colors.amber,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      peerCount > 0 ? "$peerCount Peers Active" : "Scanning...",
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
   }
+
 
   Widget _buildPeerNode(Peer peer) {
     return GestureDetector(
@@ -512,14 +594,44 @@ class _RadarScreenState extends ConsumerState<RadarScreen>
             ),
             if (transfer.status == TransferStatus.transferring) ...[
               const SizedBox(height: 8),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                child: LinearProgressIndicator(
-                  value: progressVal,
-                  backgroundColor: const Color(0xFF16202A),
-                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.cyan),
-                  minHeight: 4,
-                ),
+              TweenAnimationBuilder<double>(
+                tween: Tween(begin: 0.0, end: progressVal),
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.easeOut,
+                builder: (context, animValue, _) {
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: Stack(
+                      children: [
+                        // Background
+                        Container(
+                          height: 6,
+                          color: const Color(0xFF0F171E),
+                        ),
+                        // Animated fill
+                        FractionallySizedBox(
+                          widthFactor: animValue.clamp(0.0, 1.0),
+                          child: Container(
+                            height: 6,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Colors.cyan, Colors.cyanAccent],
+                              ),
+                              borderRadius: BorderRadius.circular(6),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.cyan.withOpacity(0.5),
+                                  blurRadius: 6,
+                                  spreadRadius: 1,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
             ],
             if (isFailed && transfer.errorMessage != null) ...[
