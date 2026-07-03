@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AirShare – Project Documentation & Interview Guide</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+
+    :root {
+      --cyan: #00bcd4;
+      --dark: #0f171e;
+      --card: #1e2830;
+      --border: #26323e;
+      --text: #e0e0e0;
+      --muted: #90a4ae;
+      --green: #4caf50;
+      --amber: #ffc107;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f5f7fa;
+      color: #1a1a2e;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    /* COVER PAGE */
+    .cover {
+      background: linear-gradient(135deg, #0f171e 0%, #1a2a3a 60%, #0d2137 100%);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 60px 40px;
+      page-break-after: always;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cover::before {
+      content: '';
+      position: absolute;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,188,212,0.1);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .cover::after {
+      content: '';
+      position: absolute;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,188,212,0.15);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .cover-logo {
+      font-size: 64px;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cover h1 {
+      font-size: 52px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      color: #00bcd4;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cover .tagline {
+      font-size: 18px;
+      color: rgba(255,255,255,0.7);
+      margin-top: 12px;
+      font-weight: 300;
+      letter-spacing: 1px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cover-divider {
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, #00bcd4, #4fc3f7);
+      border-radius: 2px;
+      margin: 28px auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cover-meta {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+      margin-top: 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cover-meta-item {
+      text-align: center;
+    }
+
+    .cover-meta-item .label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .cover-meta-item .value {
+      font-size: 16px;
+      font-weight: 600;
+      color: #00bcd4;
+      margin-top: 4px;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 40px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .badge {
+      background: rgba(0,188,212,0.1);
+      border: 1px solid rgba(0,188,212,0.3);
+      color: #00bcd4;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* CONTENT PAGES */
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 60px 50px;
+      page-break-after: always;
+    }
+
+    .page:last-child {
+      page-break-after: auto;
+    }
+
+    /* Section header */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 30px;
+      padding-bottom: 14px;
+      border-bottom: 2px solid #e8edf2;
+    }
+
+    .section-number {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #00bcd4, #4fc3f7);
+      color: white;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+
+    .section-subtitle {
+      font-size: 13px;
+      color: #90a4ae;
+      margin-top: 2px;
+    }
+
+    /* Cards */
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 20px;
+      border: 1px solid #e8edf2;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      font-size: 13.5px;
+      color: #4a5568;
+      line-height: 1.8;
+    }
+
+    /* Tech grid */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .tech-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px 22px;
+      border: 1px solid #e8edf2;
+      border-left: 4px solid #00bcd4;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+
+    .tech-card .tech-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #00bcd4;
+    }
+
+    .tech-card .tech-role {
+      font-size: 12px;
+      font-weight: 600;
+      color: #1a1a2e;
+      margin: 4px 0;
+    }
+
+    .tech-card .tech-why {
+      font-size: 12.5px;
+      color: #4a5568;
+      line-height: 1.7;
+    }
+
+    /* Q&A Cards */
+    .qa-card {
+      background: white;
+      border-radius: 14px;
+      margin-bottom: 24px;
+      border: 1px solid #e8edf2;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      page-break-inside: avoid;
+    }
+
+    .qa-question {
+      background: linear-gradient(135deg, #0f171e, #1a2a3a);
+      color: white;
+      padding: 16px 22px;
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .qa-question .q-icon {
+      background: #00bcd4;
+      color: #0f171e;
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .qa-answer {
+      padding: 18px 22px;
+      font-size: 13.5px;
+      color: #2d3748;
+      line-height: 1.85;
+    }
+
+    .qa-answer .tip {
+      background: #e8f5e9;
+      border-left: 3px solid #4caf50;
+      padding: 10px 14px;
+      border-radius: 0 6px 6px 0;
+      margin-top: 12px;
+      font-size: 12.5px;
+      color: #2e7d32;
+      font-style: italic;
+    }
+
+    .qa-answer .tip::before {
+      content: "💡 Interviewer Tip: ";
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    /* Concept explanation */
+    .concept-box {
+      background: linear-gradient(135deg, #e3f2fd, #e8eaf6);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 18px;
+      border: 1px solid #bbdefb;
+      page-break-inside: avoid;
+    }
+
+    .concept-box .concept-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1565c0;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .concept-box p {
+      font-size: 13px;
+      color: #37474f;
+      line-height: 1.8;
+    }
+
+    /* Capability table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
+    }
+
+    th {
+      background: #0f171e;
+      color: #00bcd4;
+      padding: 14px 18px;
+      text-align: left;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    td {
+      padding: 13px 18px;
+      border-bottom: 1px solid #e8edf2;
+      color: #2d3748;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: #f9fafb; }
+
+    td strong {
+      color: #1a1a2e;
+    }
+
+    /* Flow diagram */
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 16px 0;
+      flex-wrap: wrap;
+    }
+
+    .flow-step {
+      background: linear-gradient(135deg, #0f171e, #1a2a3a);
+      color: white;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .flow-arrow {
+      color: #00bcd4;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    /* Highlight */
+    .highlight {
+      background: #e0f7fa;
+      color: #00838f;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-family: 'Fira Code', monospace;
+      font-size: 12.5px;
+    }
+
+    /* Resume block */
+    .resume-block {
+      background: #0f171e;
+      color: #e0e0e0;
+      border-radius: 12px;
+      padding: 24px 28px;
+      font-family: 'Fira Code', monospace;
+      font-size: 12.5px;
+      line-height: 1.9;
+      margin-top: 16px;
+    }
+
+    .resume-block .resume-title {
+      color: #00bcd4;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .resume-block .bullet {
+      color: #4caf50;
+    }
+
+    /* Print */
+    @media print {
+      body { background: white; }
+      .cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .qa-question { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .section-number { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .resume-block { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .flow-step { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== COVER PAGE ===== -->
+<div class="cover">
+  <div class="cover-logo">📡</div>
+  <h1>AirShare</h1>
+  <p class="tagline">Serverless · Peer-to-Peer · Local File Transfer</p>
+  <div class="cover-divider"></div>
+  <p style="color:rgba(255,255,255,0.6); font-size:15px; max-width:500px; z-index:1; position:relative;">
+    Project Documentation, Architecture Deep-Dive, Technical Concepts &amp; Interview Preparation Guide
+  </p>
+  <div class="badge-row">
+    <span class="badge">Flutter & Dart</span>
+    <span class="badge">UDP Networking</span>
+    <span class="badge">TCP Sockets</span>
+    <span class="badge">Riverpod</span>
+    <span class="badge">Android + Windows</span>
+    <span class="badge">$0 Cost</span>
+  </div>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <div class="label">Project Type</div>
+      <div class="value">Open Source App</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Platform</div>
+      <div class="value">Android + Windows</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Infrastructure Cost</div>
+      <div class="value">$0.00 / month</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Max File Size</div>
+      <div class="value">Unlimited</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE 1: WHAT IS THIS PROJECT ===== -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-number">1</div>
+    <div>
+      <div class="section-title">What is AirShare?</div>
+      <div class="section-subtitle">Project Overview & Purpose</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🎯 One-Line Definition</h3>
+    <p>
+      AirShare is a <strong>cross-platform, serverless, peer-to-peer local file transfer application</strong> — 
+      similar to Apple AirDrop — that lets two devices on the same Wi-Fi network discover each other automatically 
+      and transfer files of any size directly without any internet connection, cloud storage, or server infrastructure.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>🌍 Real-World Problem It Solves</h3>
+    <p>
+      Sharing files between devices today is unnecessarily complex. You either need:
+      <br><br>
+      ❌ <strong>Cloud uploads (Google Drive, WhatsApp):</strong> File goes to a server in America and comes back — wasting bandwidth and time for devices sitting next to each other.<br>
+      ❌ <strong>USB cables:</strong> Requires physical connectors, drivers, and compatible ports.<br>
+      ❌ <strong>AirDrop:</strong> Only works between Apple devices.<br>
+      ❌ <strong>Bluetooth:</strong> Extremely slow — typically under 3 MB/s.<br><br>
+      ✅ <strong>AirShare</strong> transfers files directly at your local Wi-Fi speed (potentially 50-200 MB/s) without 
+      touching the internet, without any account login, and works across Android and Windows simultaneously.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>📱 How It Looks to the User</h3>
+    <p>
+      You open AirShare on your Windows laptop. A dark radar screen appears with a rotating green scan line. 
+      Your phone appears as a floating node on the radar within 2-3 seconds. 
+      You tap the phone node, a file picker opens, you select a file — and it begins transferring instantly. 
+      On your phone, a dialog pops up: <em>"Accept file from Sanjay's Laptop?"</em> 
+      You tap Accept, and the file appears in your Downloads folder at full Wi-Fi speed.
+    </p>
+  </div>
+</div>
+
+<!-- ===== PAGE 2: HOW IT WORKS ===== -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-number">2</div>
+    <div>
+      <div class="section-title">How Does It Work?</div>
+      <div class="section-subtitle">Step-by-Step Technical Flow</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Phase 1 — Device Discovery (UDP Broadcasting)</h3>
+    <p>
+      When AirShare opens, it does two things simultaneously using the <strong>UDP (User Datagram Protocol)</strong>:
+    </p>
+    <br>
+    <div class="flow">
+      <div class="flow-step">App Opens</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Bind to UDP Port 53530</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Broadcast JSON packet every 2 seconds to 255.255.255.255</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">All AirShare devices on same Wi-Fi hear it</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Appear on Radar</div>
+    </div>
+    <br>
+    <p>The broadcast packet is a tiny JSON message (~200 bytes) containing the device's name, unique ID, IP address, and the TCP port to connect for file transfers.</p>
+  </div>
+
+  <div class="card">
+    <h3>Phase 2 — File Transfer (TCP Streaming)</h3>
+    <p>Once you tap a peer and select a file, a direct <strong>TCP (Transmission Control Protocol)</strong> connection is established:</p>
+    <br>
+    <div class="flow">
+      <div class="flow-step">Sender connects to Receiver's IP:53531</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Sends JSON header (filename, size)</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Receiver shows Accept/Reject dialog</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">On Accept: file streams in binary chunks</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Receiver writes to Downloads folder</div>
+    </div>
+    <br>
+    <p>
+      The file is split into small chunks and streamed continuously. The app displays real-time speed 
+      (in MB/s) and a progress bar. On large files, <strong>backpressure control</strong> is applied — 
+      the sender waits for the OS network buffer to drain before sending the next batch, preventing memory overflow.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>Phase 3 — State Management (Riverpod)</h3>
+    <p>
+      All application state — which peers are active, which transfers are running, what their speed and progress is — 
+      is managed using <strong>Riverpod</strong>, a reactive state management library. 
+      When a new UDP packet arrives from a peer, the peer list updates and the radar UI rebuilds automatically. 
+      When transfer progress updates, only the affected transfer card rebuilds — not the entire screen. 
+      This ensures 60fps smooth UI at all times.
+    </p>
+  </div>
+</div>
+
+<!-- ===== PAGE 3: TECHNOLOGIES ===== -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-number">3</div>
+    <div>
+      <div class="section-title">Technologies Used & Why</div>
+      <div class="section-subtitle">Tech Stack Deep Dive</div>
+    </div>
+  </div>
+
+  <div class="tech-grid">
+    <div class="tech-card">
+      <div class="tech-name">Flutter & Dart</div>
+      <div class="tech-role">Core Framework</div>
+      <div class="tech-why">
+        Allows writing a single codebase that runs natively on Android, Windows, iOS, 
+        and macOS simultaneously. Dart's async/await model perfectly fits network programming 
+        (reading sockets, listening to streams). Flutter's rendering engine (Skia) allows 
+        custom canvas drawing for the radar animation.
+      </div>
+    </div>
+
+    <div class="tech-card">
+      <div class="tech-name">dart:io (RawDatagramSocket)</div>
+      <div class="tech-role">UDP Discovery Layer</div>
+      <div class="tech-why">
+        Dart's built-in networking library exposes raw UDP socket APIs with no third-party 
+        dependency. We use RawDatagramSocket to bind to port 53530 and broadcast subnet-wide 
+        packets at 2-second intervals. Using UDP (not TCP) is deliberate — UDP is connectionless 
+        and ideal for one-to-many broadcast-style announcements.
+      </div>
+    </div>
+
+    <div class="tech-card">
+      <div class="tech-name">dart:io (ServerSocket / Socket)</div>
+      <div class="tech-role">TCP Transfer Engine</div>
+      <div class="tech-why">
+        TCP guarantees delivery and ordering of all bytes, which is critical for file integrity. 
+        ServerSocket accepts incoming connections, reads the file header, and streams chunks 
+        directly to disk without loading the entire file into memory — making it capable of 
+        transferring files of any size (even 50GB+ videos) without crashing.
+      </div>
+    </div>
+
+    <div class="tech-card">
+      <div class="tech-name">flutter_riverpod</div>
+      <div class="tech-role">State Management</div>
+      <div class="tech-why">
+        Riverpod provides type-safe, testable, and modular state management. It separates 
+        business logic (networking) from UI cleanly. StateNotifierProviders manage peer lists 
+        and transfer maps reactively. When state changes, only dependent widgets rebuild — 
+        ensuring high performance with dozens of concurrent transfers.
+      </div>
+    </div>
+
+    <div class="tech-card">
+      <div class="tech-name">CustomPainter (Canvas API)</div>
+      <div class="tech-role">Radar Animation</div>
+      <div class="tech-why">
+        Flutter's CustomPainter gives direct access to the GPU-accelerated Skia canvas. 
+        We use it to draw concentric radar rings, the rotating sweep gradient, and pulsing 
+        circles using trigonometric functions (sin/cos) — all at 60fps with AnimationController. 
+        This demonstrates advanced Flutter rendering knowledge beyond standard widgets.
+      </div>
+    </div>
+
+    <div class="tech-card">
+      <div class="tech-name">network_info_plus</div>
+      <div class="tech-role">Local IP Resolution</div>
+      <div class="tech-why">
+        Resolves the device's current local IP address (e.g. 192.168.1.5) assigned by the 
+        Wi-Fi router. This IP is embedded in each UDP broadcast packet so other devices know 
+        exactly which address to connect to when initiating a TCP file transfer. Without this, 
+        the app cannot determine its own network identity.
+      </div>
+    </div>
+
+    <div class="tech-card">
+      <div class="tech-name">file_picker</div>
+      <div class="tech-role">File Selection</div>
+      <div class="tech-why">
+        Provides a native OS file picker dialog on each platform — Windows File Explorer on PC 
+        and Android's storage browser on phone. Returns the absolute file path which we use to 
+        open a file stream and begin reading/sending binary chunks.
+      </div>
+    </div>
+
+    <div class="tech-card">
+      <div class="tech-name">path_provider</div>
+      <div class="tech-role">Cross-Platform Save Paths</div>
+      <div class="tech-why">
+        Each operating system stores downloaded files in different locations: Android uses 
+        /storage/emulated/0/Download, Windows uses C:\Users\...\Downloads. path_provider 
+        resolves the correct platform-specific directory automatically so received files 
+        always land in the expected location on every OS.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE 4: CAPABILITIES ===== -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-number">4</div>
+    <div>
+      <div class="section-title">Capabilities & Limitations</div>
+      <div class="section-subtitle">What AirShare can and cannot do</div>
+    </div>
+  </div>
+
+  <table>
+    <tr>
+      <th>Capability</th>
+      <th>Value / Detail</th>
+    </tr>
+    <tr>
+      <td><strong>Maximum File Size</strong></td>
+      <td>Theoretically <strong>unlimited</strong> — files are streamed in chunks directly to disk. A 10GB video file can be sent without loading it into memory.</td>
+    </tr>
+    <tr>
+      <td><strong>Transfer Speed</strong></td>
+      <td>Depends on your Wi-Fi router. On a typical 5GHz Wi-Fi 5 network: <strong>30–100 MB/s</strong>. On Wi-Fi 6: up to <strong>200 MB/s+</strong>.</td>
+    </tr>
+    <tr>
+      <td><strong>Network Requirement</strong></td>
+      <td>Both devices must be on the <strong>same Wi-Fi router / LAN</strong>. Does NOT require internet access at all.</td>
+    </tr>
+    <tr>
+      <td><strong>Supported Platforms</strong></td>
+      <td>Android, Windows, macOS, Linux, iOS (any platform Flutter supports)</td>
+    </tr>
+    <tr>
+      <td><strong>Concurrent Transfers</strong></td>
+      <td>Multiple simultaneous transfers are tracked in state. Practically limited by your network bandwidth.</td>
+    </tr>
+    <tr>
+      <td><strong>File Types</strong></td>
+      <td>Any file type — documents, videos, APKs, ZIP archives, images, etc.</td>
+    </tr>
+    <tr>
+      <td><strong>Security</strong></td>
+      <td>Transfers require explicit Accept/Reject consent on the receiving device. Files are NOT encrypted in transit (suitable for trusted local networks).</td>
+    </tr>
+    <tr>
+      <td><strong>Battery / Background Usage</strong></td>
+      <td><strong>Zero</strong> background drain. All networking stops the moment the app is closed or minimised.</td>
+    </tr>
+    <tr>
+      <td><strong>Infrastructure Cost</strong></td>
+      <td><strong>$0.00 per month.</strong> No servers, no cloud, no database subscription.</td>
+    </tr>
+    <tr>
+      <td><strong>Discovery Range</strong></td>
+      <td>As long as both devices are on the same router subnet (same Wi-Fi password). Works across floors of a building on the same network.</td>
+    </tr>
+    <tr>
+      <td><strong>Max Peers Discoverable</strong></td>
+      <td>Unlimited (all AirShare devices on the network). Stale peers pruned after 8 seconds of no broadcast.</td>
+    </tr>
+  </table>
+
+  <div class="card">
+    <h3>⚠️ Current Limitations (Honest Assessment for Interviews)</h3>
+    <p>
+      <strong>1. No encryption in transit:</strong> Data travels as raw bytes. Future version can add TLS socket wrapping for security.<br><br>
+      <strong>2. Same subnet only:</strong> Cannot discover devices across different routers or VLANs. mDNS could extend this.<br><br>
+      <strong>3. No resume on failure:</strong> If a transfer is interrupted midway, it must be restarted from the beginning. A resumable chunked protocol (like BitTorrent) could fix this.<br><br>
+      <strong>4. No sender-side acknowledgement:</strong> The sender has no confirmation that the receiver accepted and saved the file correctly.
+    </p>
+  </div>
+</div>
+
+<!-- ===== PAGE 5: KEY CONCEPTS ===== -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-number">5</div>
+    <div>
+      <div class="section-title">Key Technical Concepts</div>
+      <div class="section-subtitle">Understand these before your interview</div>
+    </div>
+  </div>
+
+  <div class="concept-box">
+    <div class="concept-title">📡 UDP vs TCP — Why We Use Both</div>
+    <p>
+      <strong>UDP (User Datagram Protocol):</strong> Fire-and-forget. Sends a packet without establishing a connection or waiting for acknowledgement. Fast, lightweight, but packets can be lost. 
+      Perfect for our discovery broadcasts — we send our identity every 2 seconds so even if one packet is dropped, the next one arrives. <br><br>
+      <strong>TCP (Transmission Control Protocol):</strong> Establishes a formal connection, guarantees every byte arrives in order, and retransmits lost packets. Slower to set up but reliable. 
+      Perfect for file transfer — every byte of a file MUST arrive correctly or the file is corrupted.
+    </p>
+  </div>
+
+  <div class="concept-box">
+    <div class="concept-title">🔊 Subnet Broadcasting — How 255.255.255.255 Works</div>
+    <p>
+      When we send a UDP packet to <span class="highlight">255.255.255.255</span>, the Wi-Fi router delivers it to <strong>every device on the local network</strong> simultaneously. 
+      This is called a broadcast address. Every device running AirShare on port 53530 wakes up, reads the packet, parses the sender's device information, and adds it to their peer list. 
+      It is similar to standing in a room and announcing "I'm here!" — everyone hears it at once.
+    </p>
+  </div>
+
+  <div class="concept-box">
+    <div class="concept-title">🚿 Backpressure in TCP Streaming</div>
+    <p>
+      When sending a large file, you cannot dump all the data into the socket at once — the OS network buffer would overflow and crash. 
+      Instead, we read the file in small chunks (typically 8-64 KB), write each chunk to the socket, then call <span class="highlight">socket.flush()</span> to wait until the OS has actually sent that chunk before reading the next one. 
+      This is called <strong>backpressure</strong> — the receiver's buffer controls the rate at which the sender sends. It is the same principle used by HTTP chunked transfer encoding and video streaming.
+    </p>
+  </div>
+
+  <div class="concept-box">
+    <div class="concept-title">⚛️ Reactive State Management with Riverpod</div>
+    <p>
+      Riverpod uses a Provider-Observer pattern. A <strong>StateNotifier</strong> holds application state (e.g., the list of active peers). 
+      Any widget that reads this provider is automatically rebuilt whenever the state changes. 
+      When a UDP packet arrives from a new device at 2:00:05 AM, the peer list StateNotifier is updated, 
+      and only the radar widget that watches it rebuilds — not the entire app screen. 
+      This is fundamentally similar to React's useState + useContext pattern.
+    </p>
+  </div>
+
+  <div class="concept-box">
+    <div class="concept-title">🎨 CustomPainter — GPU Canvas Drawing</div>
+    <p>
+      Flutter's standard UI toolkit (buttons, text, containers) is built on top of a canvas. 
+      CustomPainter lets you draw directly to this canvas using paths, arcs, gradients, and lines. 
+      The radar animation uses a SweepGradient — a cone-shaped gradient that rotates — driven by an AnimationController 
+      that fires 60 times per second. The <span class="highlight">shouldRepaint()</span> method ensures the canvas 
+      only redraws when the angle changes, preventing unnecessary GPU work.
+    </p>
+  </div>
+</div>
+
+<!-- ===== PAGE 6: INTERVIEW Q&A ===== -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-number">6</div>
+    <div>
+      <div class="section-title">Interview Q&A — Part 1</div>
+      <div class="section-subtitle">Common questions and how to answer them confidently</div>
+    </div>
+  </div>
+
+  <div class="qa-card">
+    <div class="qa-question">
+      <span class="q-icon">Q</span>
+      Tell me about this AirShare project. What does it do and why did you build it?
+    </div>
+    <div class="qa-answer">
+      AirShare is a cross-platform, serverless file transfer app I built from scratch using Flutter and Dart. 
+      The core idea is simple — if two devices are on the same Wi-Fi network, why should a file travel to a server in 
+      another country just to come back to a device sitting next to you? AirShare solves this by sending files 
+      directly between devices at full local network speed — no internet, no account, no cost.
+      <br><br>
+      I built it because I wanted to demonstrate real systems networking skills. Anyone can make a CRUD app. 
+      But implementing UDP broadcast discovery and TCP socket streaming from scratch requires understanding 
+      how networks actually work at the protocol level — which is exactly the kind of depth product companies look for.
+      <div class="tip">Lead with the problem you solved, not the technology. Interviewers want to see product thinking first.</div>
+    </div>
+  </div>
+
+  <div class="qa-card">
+    <div class="qa-question">
+      <span class="q-icon">Q</span>
+      How does the device discovery work? How does your phone "find" the laptop?
+    </div>
+    <div class="qa-answer">
+      Each device runs a UDP socket listener on port 53530. Every 2 seconds, it broadcasts a small JSON packet 
+      to the subnet broadcast address 255.255.255.255 — which the router delivers to every device on the network simultaneously.
+      <br><br>
+      The packet contains the device's name, unique ID, local IP address, and the TCP port it's listening on 
+      for file transfers. When another AirShare device receives this packet, it parses it and adds the sender 
+      to its peer list. If a device hasn't broadcast in 8 seconds — meaning it closed the app or lost Wi-Fi — 
+      it's automatically pruned from the list.
+      <br><br>
+      I chose UDP over TCP for discovery specifically because UDP is connectionless and supports subnet broadcasting. 
+      TCP requires a pre-established connection, so you can't use it to announce yourself to unknown devices.
+      <div class="tip">This answer demonstrates understanding of UDP vs TCP tradeoffs. Expect a follow-up: "What if a UDP packet is lost?" Answer: "The next broadcast arrives in 2 seconds anyway, so it self-heals."</div>
+    </div>
+  </div>
+
+  <div class="qa-card">
+    <div class="qa-question">
+      <span class="q-icon">Q</span>
+      How do you handle large files? What if the file is 5GB?
+    </div>
+    <div class="qa-answer">
+      I never load the entire file into memory. Instead, I use Dart's <strong>file.openRead()</strong> which 
+      returns a Stream of byte chunks. Each chunk (typically 8-64 KB) is piped directly into the TCP socket, 
+      and I call socket.flush() after each chunk to apply backpressure — meaning the sender pauses until 
+      the OS confirms that chunk was transmitted before reading the next one.
+      <br><br>
+      On the receiver side, I open a file sink and write each incoming chunk directly to disk as it arrives. 
+      So at any point in time, only one small chunk is in memory — not the full file. A 5GB file would 
+      transfer just as reliably as a 1KB text file. Memory usage stays constant regardless of file size.
+      <div class="tip">This answer shows you understand streaming vs buffering — a key systems concept. Strong follow-up: mention that this is the same principle used by Netflix's video streaming and HTTP chunked transfer encoding.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE 7: INTERVIEW Q&A CONTINUED ===== -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-number">7</div>
+    <div>
+      <div class="section-title">Interview Q&A — Part 2</div>
+      <div class="section-subtitle">Deeper technical and design questions</div>
+    </div>
+  </div>
+
+  <div class="qa-card">
+    <div class="qa-question">
+      <span class="q-icon">Q</span>
+      Why did you choose Flutter instead of native Android (Kotlin) or React Native?
+    </div>
+    <div class="qa-answer">
+      The core value proposition of AirShare is that it works across all platforms from one codebase. 
+      If I built it in native Android Kotlin, I'd have to rewrite the entire networking layer, UI, 
+      and state management separately for Windows, iOS, and macOS. Flutter gives true native compilation 
+      on all platforms from a single Dart codebase.
+      <br><br>
+      Additionally, Dart's async/await and Stream APIs are first-class citizens — which maps perfectly 
+      to TCP socket programming where you're constantly listening to streams of incoming bytes. 
+      And Flutter's CustomPainter gave me direct canvas access to build the radar animation without 
+      needing any third-party library.
+      <br><br>
+      React Native was ruled out because it depends on a JavaScript bridge to native code — 
+      introducing latency in the hot path of our file streaming loop. Flutter compiles to native ARM code directly.
+      <div class="tip">Demonstrating that you evaluated multiple options and chose based on technical merit shows seniority. Always explain trade-offs, not just your choice.</div>
+    </div>
+  </div>
+
+  <div class="qa-card">
+    <div class="qa-question">
+      <span class="q-icon">Q</span>
+      What state management approach did you use and why?
+    </div>
+    <div class="qa-answer">
+      I used Riverpod with StateNotifier. The peer list and active transfers are each managed by 
+      separate StateNotifierProviders. When a UDP packet arrives from a new device, the PeerListNotifier 
+      updates its state and only widgets subscribed to that provider rebuild — not the entire widget tree.
+      <br><br>
+      I chose Riverpod over alternatives like Provider or BLoC because it's compile-time safe — 
+      you can't accidentally access a provider that hasn't been initialised. It also separates 
+      business logic from UI cleanly, which makes unit testing the networking layer possible 
+      without spinning up a UI at all.
+      <div class="tip">Interviewers at product companies love hearing about testability. Mention that you wrote unit tests for the Peer model serialisation to verify that UDP packet parsing works correctly.</div>
+    </div>
+  </div>
+
+  <div class="qa-card">
+    <div class="qa-question">
+      <span class="q-icon">Q</span>
+      What would you add or improve if you had more time?
+    </div>
+    <div class="qa-answer">
+      Several improvements would make this production-ready:
+      <br><br>
+      <strong>1. End-to-End Encryption:</strong> Wrap the TCP socket with TLS using a self-signed certificate exchanged over the discovery broadcast. This would prevent any device on the network from sniffing the file contents.
+      <br><br>
+      <strong>2. Resumable Transfers:</strong> Store the byte offset of interrupted transfers. On reconnection, the sender can start streaming from where it stopped — similar to how download managers work.
+      <br><br>
+      <strong>3. Multi-file & folder transfer:</strong> Currently one file at a time. ZIP compression on the fly would enable folder transfers.
+      <br><br>
+      <strong>4. mDNS Discovery:</strong> Replace UDP broadcast with mDNS (Multicast DNS) for more reliable peer discovery across complex network topologies including some enterprise networks that block broadcasts.
+      <div class="tip">This question tests intellectual honesty and product maturity. Saying "nothing, it's perfect" is a red flag. Showing a clear technical roadmap demonstrates engineering leadership mindset.</div>
+    </div>
+  </div>
+
+  <div class="qa-card">
+    <div class="qa-question">
+      <span class="q-icon">Q</span>
+      How did you handle errors and edge cases?
+    </div>
+    <div class="qa-answer">
+      Several edge cases were handled deliberately:
+      <br><br>
+      <strong>File name collisions:</strong> If a file with the same name already exists in the Downloads folder, 
+      the app automatically appends a counter suffix (e.g. photo_1.jpg, photo_2.jpg) instead of overwriting silently.
+      <br><br>
+      <strong>Peer timeout:</strong> If a device closes the app or loses Wi-Fi, it stops broadcasting. 
+      Any peer not heard from in 8 seconds is pruned from the radar automatically — the UI stays accurate.
+      <br><br>
+      <strong>Connection refused:</strong> If the receiver rejects the file, the sender gets a REJECT response 
+      over the TCP handshake and transitions the transfer status to Rejected — not an error crash.
+      <br><br>
+      <strong>Socket errors:</strong> All socket operations are wrapped in try-catch blocks. Network errors 
+      surface as user-visible error messages on the transfer card, not as application crashes.
+      <div class="tip">Error handling depth signals production engineering maturity. Senior engineers always think about what happens when things go wrong, not just the happy path.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE 8: RESUME + CONCEPTS ===== -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-number">8</div>
+    <div>
+      <div class="section-title">Resume Description & Key Takeaways</div>
+      <div class="section-subtitle">How to present this project on your CV and GitHub</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📝 How to Write This on Your Resume</h3>
+  </div>
+
+  <div class="resume-block">
+    <div class="resume-title">AirShare — Serverless P2P Local File Transfer App | Flutter, Dart, Riverpod</div>
+    <span class="bullet">•</span> Built a cross-platform (Android + Windows) peer-to-peer file sharing application from scratch using Flutter and Dart, enabling direct device-to-device transfers over local Wi-Fi with zero server infrastructure.<br>
+    <span class="bullet">•</span> Implemented custom UDP subnet broadcasting for automatic device discovery; engineered a TCP socket streaming engine with backpressure control capable of transferring files of unlimited size at 50–200 MB/s.<br>
+    <span class="bullet">•</span> Designed a reactive state management architecture using Riverpod StateNotifiers to track real-time transfer progress, peer availability, and transfer speed metrics with 60fps UI updates.<br>
+    <span class="bullet">•</span> Built a GPU-accelerated animated radar visualisation using Flutter's CustomPainter canvas API with sweep gradients and trigonometric peer positioning.<br>
+    <span class="bullet">•</span> Deployed a production Android APK and Windows executable from a single Dart codebase; resolved cross-platform Gradle version conflicts and Android SDK dependency mismatches during build pipeline setup.
+  </div>
+
+  <div class="card" style="margin-top: 24px;">
+    <h3>🏆 What This Project Proves to an Interviewer</h3>
+    <p>
+      <strong>Systems Networking Knowledge:</strong> You know the difference between UDP and TCP and can implement raw socket programming — not just call a REST API.<br><br>
+      <strong>Performance Engineering:</strong> You understand memory management (streaming vs buffering) and backpressure — concepts that apply to any high-throughput system.<br><br>
+      <strong>Cross-Platform Architecture:</strong> You can make architectural decisions (platform-specific save paths, OS-level permissions, Gradle configuration) that make software work across multiple operating systems.<br><br>
+      <strong>Production Mindset:</strong> Error handling, edge case coverage, and unit tests show you think beyond just the happy path.<br><br>
+      <strong>Initiative & Ownership:</strong> Building and deploying a real app (not a tutorial clone) from scratch, debugging real compilation errors, and putting it on GitHub shows you can own end-to-end delivery.
+    </p>
+  </div>
+
+  <div style="text-align: center; padding: 40px 0 20px; border-top: 2px solid #e8edf2; margin-top: 40px;">
+    <div style="font-size: 32px; margin-bottom: 10px;">🚀</div>
+    <div style="font-size: 18px; font-weight: 700; color: #1a1a2e;">You Built Something Real.</div>
+    <div style="font-size: 14px; color: #90a4ae; margin-top: 6px;">Push it to GitHub. Record a demo. Put the link on your resume. Good luck!</div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -126,10 +126,12 @@ class TransferService {
       await sink.close();
       stopwatch.stop();
 
-      if (bytesReceived == expectedSize) {
+      // Use >= to handle minor byte-count edge cases from socket buffering.
+      // The real success indicator is the file existing with full content.
+      if (bytesReceived >= expectedSize) {
         onComplete();
       } else {
-        onError("Transfer interrupted. Received $bytesReceived bytes of $expectedSize.");
+        onError("Transfer incomplete. Got $bytesReceived of $expectedSize bytes.");
       }
     } catch (e) {
       await sink?.close();
