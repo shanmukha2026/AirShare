@@ -1,0 +1,14 @@
+# Override GitHub Linguist to correctly show Dart as the primary language
+
+# Mark all Dart files as Dart (primary language)
+*.dart linguist-language=Dart
+
+# Exclude generated/vendored platform files from language stats
+android/** linguist-vendored
+ios/** linguist-vendored
+linux/** linguist-vendored
+macos/** linguist-vendored
+windows/** linguist-vendored
+web/** linguist-vendored
+*.g.dart linguist-generated=true
+*.freezed.dart linguist-generated=true
