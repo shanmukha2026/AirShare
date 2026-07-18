@@ -4,7 +4,6 @@
 
 AirShare is a cross-platform, serverless, peer-to-peer local file transfer application — similar to Apple AirDrop — that lets two devices on the same Wi-Fi network discover each other automatically and transfer files of any size directly, without any internet connection, cloud storage, or server infrastructure.
 
-
 ---
 
 ## 🌍 The Problem
@@ -25,6 +24,37 @@ Sharing files between devices today is unnecessarily complex:
 ## ✨ How It Looks to the User
 
 Open AirShare on your laptop — a dark radar screen appears with a rotating scan line. Your phone shows up as a floating node within 2–3 seconds. Tap the node, pick a file, and the transfer begins instantly. On the receiving device, an Accept/Reject dialog pops up — tap Accept, and the file lands in your Downloads folder at full Wi-Fi speed.
+
+---
+
+## 📸 Screenshots
+
+<table>
+  <tr>
+    <th align="center">📱 Android — Incoming File</th>
+    <th align="center">🖥️ Windows — Peer Discovered</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="PASTE_ANDROID_INCOMING_URL_HERE" width="260"/>
+    </td>
+    <td align="center">
+      <img src="PASTE_WINDOWS_PEER_URL_HERE" width="480"/>
+    </td>
+  </tr>
+  <tr>
+    <th align="center">🖥️ Windows — Transfer Complete</th>
+    <th align="center">📱 Android — Transfer Panel</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="PASTE_WINDOWS_COMPLETE_URL_HERE" width="480"/>
+    </td>
+    <td align="center">
+      <img src="PASTE_ANDROID_TRANSFER_URL_HERE" width="260"/>
+    </td>
+  </tr>
+</table>
 
 ---
 
@@ -109,24 +139,3 @@ flutter run -d windows
 
 # Run on Android
 flutter run -d <android-device-id>
-```
-
-> Both devices must be connected to the **same Wi-Fi network** for discovery to work.
-
----
-
-## 🏗️ Architecture Highlights
-
-- **UDP vs TCP** — UDP is used for lightweight, connectionless discovery broadcasts; TCP guarantees ordered, reliable delivery for file bytes.
-- **Backpressure streaming** — Files are read in 8–64 KB chunks and flushed to the socket sequentially, so a 5GB file transfers with the same constant memory footprint as a 1KB file.
-- **Reactive UI** — Riverpod's Provider-Observer pattern ensures only the widgets watching changed state rebuild, keeping the app smooth even with several concurrent transfers.
-
----
-
-## 📄 License
-
-This project is open source. Feel free to fork, contribute, or use it as a learning reference for Flutter networking.
-
----
-
-Built with Flutter & Dart • $0 infrastructure cost • No servers, no cloud, no subscriptions.
