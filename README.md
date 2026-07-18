@@ -27,36 +27,7 @@ Open AirShare on your laptop — a dark radar screen appears with a rotating sca
 
 ---
 
-## 📸 Screenshots
 
-<table>
-  <tr>
-    <th align="center">📱 Android — Incoming File</th>
-    <th align="center">🖥️ Windows — Peer Discovered</th>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="PASTE_ANDROID_INCOMING_URL_HERE" width="260"/>
-    </td>
-    <td align="center">
-      <img src="PASTE_WINDOWS_PEER_URL_HERE" width="480"/>
-    </td>
-  </tr>
-  <tr>
-    <th align="center">🖥️ Windows — Transfer Complete</th>
-    <th align="center">📱 Android — Transfer Panel</th>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="PASTE_WINDOWS_COMPLETE_URL_HERE" width="480"/>
-    </td>
-    <td align="center">
-      <img src="PASTE_ANDROID_TRANSFER_URL_HERE" width="260"/>
-    </td>
-  </tr>
-</table>
-
----
 
 ## ⚙️ How It Works
 
